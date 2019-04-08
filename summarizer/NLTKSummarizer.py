@@ -55,6 +55,22 @@ class NLTKSummarizer:
             [word for word in words if word not in stop_words]
         ]
 
+    def tokenize_to_sentence(self, content):
+        return sent_tokenize(content)
+
+    def tokenize_single_sentence(self, content, is_trim=False):
+        """
+        Accept the content and produce a list of tokenized sentences,
+        a list of tokenized words, and then a list of the tokenized words
+        with stop words built from NLTK corpus and Python string class filtred out.
+        """
+        stop_words = set(stopwords.words('english') + list(punctuation))
+        words = word_tokenize(content.lower())
+        if(is_trim):
+            return [word for word in words if word not in stop_words]
+
+        return words
+
     def score_tokens(self, filterd_words, sentence_tokens):
         """
         Builds a frequency map based on the filtered list of words and
@@ -110,4 +126,4 @@ class NLTKSummarizer:
 
 
 
-NLTKSummarizer().main()
+# NLTKSummarizer().main()

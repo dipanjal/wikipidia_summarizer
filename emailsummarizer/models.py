@@ -1,3 +1,3 @@
 class models:
-    def isAddress(self,text):
-        if()
+    def isAddress(self, text):
+        pass
