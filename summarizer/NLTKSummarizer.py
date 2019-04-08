@@ -1,19 +1,20 @@
 from scrapper.wikipidia import wikipidia
 from fileop.FileHelper import FileHelper
 
-from nltk.tokenize import sent_tokenize,word_tokenize
+from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from string import punctuation
 from nltk.probability import FreqDist
 from heapq import nlargest
 from collections import defaultdict
+import re
+
 
 class NLTKSummarizer:
 
     def summarize_wikipidia_article(self, url):
         resp = wikipidia().do_scrap(url)
         if resp['code'] == 200:
-            # print(resp['body'])
             content = resp['body']
 
             content = self.sanitize_input(content)
@@ -82,15 +83,31 @@ class NLTKSummarizer:
 
         indexes = nlargest(length, ranks, key=ranks.get)
         final_sentences = [sentences[j] for j in sorted(indexes)]
-        return ' '.join(final_sentences)
-
+        final_sentences = ' '.join(final_sentences)
+        return final_sentences
+        # final_sentences = re.sub(r'[()]*', ' ', final_sentences)
+        # replace = {
+        #     ord('('): ' ',
+        #     ord(')'): ' ',
+        #     ord('['): ' ',
+        #     ord(']'): ' '
+        # }
+        #
+        # return final_sentences.translate(replace)
 
 
     def main(self):
-        # summery = self.summerize_wikipidia_article("https://en.wikipedia.org/wiki/Artificial_intelligence")
-        summery = self.summarize_wikipidia_article("https://en.wikipedia.org/wiki/Python_(programming_language)")
-        print(summery)
-        saved_file_location = FileHelper().write_in_file(summery, 'what is Python')
+        summery = self.summarize_wikipidia_article("https://en.wikipedia.org/wiki/Artificial_intelligence")
+        # summery = self.summarize_wikipidia_article("https://en.wikipedia.org/wiki/Bangladesh")
+        saved_file_location = FileHelper().write_in_file(summery, 'what is Bangladesh')
         print("file located at: ", saved_file_location)
+
+        # resp = wikipidia().do_scrap("https://en.wikipedia.org/wiki/Artificial_intelligence")
+        # if resp['code'] == 200:
+        #     content = resp['body']
+        #     saved_file_location = FileHelper().write_in_file(content, 'Artificial intelligence')
+        #     print("file located at: ", saved_file_location)
+
+
 
 NLTKSummarizer().main()

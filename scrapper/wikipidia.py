@@ -27,8 +27,8 @@ class wikipidia:
             response['body'] = article_text.strip()
 
         except request.HTTPError as http_error:
-            response['code'] = http_error.code;
-            response['message'] = http_error.msg;
+            response['code'] = http_error.code
+            response['message'] = http_error.msg
 
         return response
 
